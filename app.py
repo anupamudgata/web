@@ -2,16 +2,31 @@
 
 import streamlit as st
 import os
+import sys
 from dotenv import load_dotenv
-from web_scraper_chatbot.scraper import scrape_website_with_langchain, scrape_website_with_bs4
-from web_scraper_chatbot.chatbot import WebpageChatbot
+
+# Try different import approaches for compatibility with different environments
+try:
+    from web_scraper_chatbot.scraper import scrape_website_with_langchain, scrape_website_with_bs4
+    from web_scraper_chatbot.chatbot import WebpageChatbot
+except ModuleNotFoundError:
+    # Add the current directory to the path
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+    try:
+        from web_scraper_chatbot.scraper import scrape_website_with_langchain, scrape_website_with_bs4
+        from web_scraper_chatbot.chatbot import WebpageChatbot
+    except ModuleNotFoundError:
+        # If that doesn't work, try a relative import
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from web_scraper_chatbot.scraper import scrape_website_with_langchain, scrape_website_with_bs4
+        from web_scraper_chatbot.chatbot import WebpageChatbot
 
 # Load environment variables
 load_dotenv()
 
 # Check if OpenAI API key is set
 if not os.getenv("OPENAI_API_KEY"):
-    st.error("Error: OPENAI_API_KEY not found in environment variables. Please create a .env file with your OPENAI_API_KEY.")
+    st.error("Error: OPENAI_API_KEY not found in environment variables. Please add it to your Streamlit Cloud secrets.")
     st.stop()
 
 # Set page configuration

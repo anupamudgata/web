@@ -1,0 +1,13 @@
+[server]
+enableCORS = false
+enableXsrfProtection = false
+
+[deprecation]
+showPyplotGlobalUse = false
+
+[global]
+developmentMode = false
+
+[runner]
+# Add the parent directory to Python path
+pythonPath = "." 
